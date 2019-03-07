@@ -1,7 +1,7 @@
-FROM golang:1.12-alpine as builder
-
-RUN apk add --no-cache gcc libc-dev make git \
-    && go get -u github.com/pressly/goose/cmd/goose
-
 FROM alpine:latest
-COPY --from=builder /go/bin/goose /bin/goose
+
+ENV GOOSE_URL=https://github.com/pressly/goose/releases/download/v2.6.0/goose-linux64
+
+RUN apk add --update --no-cache ca-certificates curl \
+    && curl -L -o /bin/goose $GOOSE_URL \
+    && chmod 0755 /bin/goose
